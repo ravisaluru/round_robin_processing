@@ -11,12 +11,14 @@ import java.util.*;
 public class Driver {
 
 
-    public static void main(String args[]) {
+    public static int getNumProc() {
+        /*
+         * Return the number of processes as determined by user
+        */
 
         Scanner keyboard = new Scanner(System.in);
-
-        // Get number of processes
         int numProc = 0;
+
         System.out.println("Enter number of processes:");
         try {
             numProc = keyboard.nextInt();
@@ -24,14 +26,36 @@ public class Driver {
             System.out.println("Invalid input.  Please enter an integer.");
         }
 
-        // Get time quantum
-        double timeQuantum = 0;
-        System.out.println("Enter time quantum: ");
+        return numProc;
+    }
+
+
+    public static double getTimeQuantum() {
+        /*
+         * Return the time quantum as determined by user
+        */
+
+        Scanner keyboard = new Scanner(System.in);
+        double timeQuantum = 0.0;
+
+        System.out.println("Enter time quantum:");
         try {
             timeQuantum = keyboard.nextDouble();
         } catch(Exception e) {
             System.out.println("Invalid input.  Please enter a float.");
         }
+
+        return timeQuantum;
+    }
+
+
+    public static void main(String args[]) {
+
+        // Get number of processes
+        int numProc = getNumProc();
+
+        // Get time quantum
+        double timeQuantum = getTimeQuantum();
 
         // Build each process and place in ready queue
         List<Process> readyQueue = new ArrayList<Process>();
