@@ -6,7 +6,7 @@
  * project.
 */
 
-import java.util.Scanner;
+import java.util.*;
 
 public class Driver {
 
@@ -34,6 +34,12 @@ public class Driver {
         }
 
         // Build each process and place in ready queue
+        List<Process> readyQueue = new ArrayList<Process>();
+        for (int i=0; i<numProc; i++) {
+            Process p = new Process();
+            readyQueue.add(p);
+        }
+
 
         // Use round-robin scheduling to execute processes
 
