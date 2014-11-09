@@ -11,6 +11,56 @@ import java.util.*;
 public class Driver {
 
 
+    public static void main(String args[]) {
+
+        // Get number of processes
+        int numProc = getNumProc();
+
+        // Get time quantum
+        double timeQuantum = getTimeQuantum();
+
+        // Get burst times for each process
+        List<Double> burstTimes = getBurstTimes(numProc);
+
+        // Build each process and place in ready queue
+        List<Process> readyQueue = new ArrayList<Process>();
+        for (int i=0; i<numProc; i++) {
+            Process p = new Process();
+            p.pid = i;
+            readyQueue.add(p);
+        }
+
+        // Use round-robin scheduling to execute processes
+
+    }
+
+
+    public static List<Double> getBurstTimes(int numProc) {
+        /*
+         * Return a list containing the burst times for each process
+        */
+
+        Scanner keyboard = new Scanner(System.in);
+        List<Double> burstTimes = new ArrayList<Double>();
+        Double burstTime = 0.0;
+
+        for (int i=0; i<numProc; i++) {
+
+            System.out.printf("Enter burst time for process %d:\n", i+1);
+
+            while (!keyboard.hasNextDouble()) {
+                System.out.println("Invalid input.  Please enter a float.");
+                keyboard.next();
+            }
+            burstTime = keyboard.nextDouble();
+
+            burstTimes.add(burstTime);
+        }
+
+        return burstTimes;
+    }
+
+
     public static int getNumProc() {
         /*
          * Return the number of processes as determined by user
@@ -20,11 +70,12 @@ public class Driver {
         int numProc = 0;
 
         System.out.println("Enter number of processes:");
-        try {
-            numProc = keyboard.nextInt();
-        } catch(Exception e) {
+
+        while (!keyboard.hasNextInt()) {
             System.out.println("Invalid input.  Please enter an integer.");
+            keyboard.next();
         }
+        numProc = keyboard.nextInt();
 
         return numProc;
     }
@@ -39,34 +90,12 @@ public class Driver {
         double timeQuantum = 0.0;
 
         System.out.println("Enter time quantum:");
-        try {
-            timeQuantum = keyboard.nextDouble();
-        } catch(Exception e) {
+        while (!keyboard.hasNextDouble()) {
             System.out.println("Invalid input.  Please enter a float.");
+            keyboard.next();
         }
+        timeQuantum = keyboard.nextDouble();
 
         return timeQuantum;
     }
-
-
-    public static void main(String args[]) {
-
-        // Get number of processes
-        int numProc = getNumProc();
-
-        // Get time quantum
-        double timeQuantum = getTimeQuantum();
-
-        // Build each process and place in ready queue
-        List<Process> readyQueue = new ArrayList<Process>();
-        for (int i=0; i<numProc; i++) {
-            Process p = new Process();
-            readyQueue.add(p);
-        }
-
-
-        // Use round-robin scheduling to execute processes
-
-    }
-
 }
