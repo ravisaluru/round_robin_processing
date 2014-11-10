@@ -25,13 +25,35 @@ public class Driver {
         // Build each process and place in ready queue
         List<Process> readyQueue = new ArrayList<Process>();
         for (int i=0; i<numProc; i++) {
-            Process p = new Process();
-            p.pid = i;
-            readyQueue.add(p);
+            Process process = new Process();
+            process.pid = i;
+            process.burstTime = burstTimes.get(i);
+            readyQueue.add(process);
         }
 
         // Use round-robin scheduling to execute processes
+        while (readyQueue.size() > 0) {
 
+            // Get top process
+            Process p = readyQueue.get(0);
+
+            // If the process execution time is less than burst time,
+            // then execute the process for a time quantum or until
+            // execution time == burst time
+            if (p.executionTime + timeQuantum < p.burstTime) {
+                p.executionTime = p.executionTime + timeQuantum;
+                readyQueue.remove(0);
+            } else if (p.executionTime + timeQuantum >= p.burstTime) {
+                p.executionTime = p.executionTime + (p.burstTime - p.executionTime);
+                readyQueue.remove(0);
+            }
+
+            // If execution time is still less than burst time, place
+            // process at bottom of ready queue
+            if (p.executionTime < p.burstTime) {
+                readyQueue.add(p);
+            }
+        }
     }
 
 
