@@ -11,19 +11,10 @@ public class Process {
 		 * Constructor method.
 		*/
 
-		pid = 0;
+		pid = 1;
 		burstTime = 0.0;
 		executionTime = 0.0;
 		waitingTime = 0.0;
 		turnaroundTime = 0.0;
-	}
-
-	public void start(double timeQuantum) {
-		/*
-		 * Executes the process.
-		*/
-
-		
-
 	}
 }
