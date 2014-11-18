@@ -22,20 +22,47 @@ public class Driver {
         // Read in process list
         List<String> processList = readProcesses(processFile);
 
-        // Read in parameters for each process
+        // Read in each process and place it in ready queue
+        List<Process> readyQueue = new ArrayList<Process>();
+        for (int i=0; i<processList.size(); i++) {
+            Process process = initProcess(processList, i);
+            readyQueue.add(process);
+        }
+
+        // Schedule the processes
+        Scheduler scheduler = new Scheduler();
+        scheduler.roundRobin(readyQueue, timeQuantum);
+    }
 
 
-        // // Build each process and place in ready queue
-        // List<Process> readyQueue = new ArrayList<Process>();
-        // for (int i=0; i<numProc; i++) {
-        //     Process process = new Process();
-        //     process.pid = i+1;
-        //     process.burstTime = burstTimes.get(i);
-        //     readyQueue.add(process);
-        // }
+    public static Process initProcess(List<String> processList, int i) {
+        /*
+         * Read in the process and assign class attributes.
+        */
 
-        // Scheduler scheduler = new Scheduler();
-        // scheduler.roundRobin(readyQueue, timeQuantum);
+        // Read in process parameters from file
+        String processFile = processList.get(i);
+        List<String> attributeList = new ArrayList<String>();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(processFile));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                attributeList.add(line);
+            }
+        } catch(Exception e) {
+            System.out.printf("Error reading in file %s", processFile);
+        }
+
+        // Parse attribute list
+        String pid = attributeList.get(0);
+        double burstTime = Double.parseDouble(attributeList.get(1));
+
+        // Assign attributes to process
+        Process process = new Process();
+        process.pid = pid;
+        process.burstTime = burstTime;
+
+        return process;
     }
 
 
@@ -71,10 +98,8 @@ public class Driver {
                 processList.add(line);
             }
         } catch(Exception e) {
-            System.out.printf("Error reading in file %s", processFile);
+            System.out.printf("Error reading in file", processFile);
         }
-
-        System.out.println(processList.get(1));
 
         return processList;
     }

@@ -1,6 +1,6 @@
 public class Process {
 
-    int pid;
+    String pid;
     double burstTime;
     double executionTime;
     double waitingTime;
@@ -11,7 +11,7 @@ public class Process {
          * Constructor method.
         */
 
-        pid = 1;
+        pid = "1";
         burstTime = 0.0;
         executionTime = 0.0;
         waitingTime = 0.0;
