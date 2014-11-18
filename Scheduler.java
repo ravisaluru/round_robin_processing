@@ -9,9 +9,9 @@ public class Scheduler {
 
         while (readyQueue.size() > 0) {
 
-            // Get top process
+            // Get next process
             Process p = readyQueue.get(0);
-            System.out.printf("Loading process PID = %d\n", p.pid);
+            System.out.printf("\nLoading process PID = %d\n", p.pid);
             System.out.printf("\tProcess execution time: %f\n", p.executionTime);
             System.out.printf("\tProcess burst time: %f\n", p.burstTime);
 
@@ -29,7 +29,7 @@ public class Scheduler {
             }
 
             // If execution time is still less than burst time, place
-            // process at bottom of ready queue
+            // process at beginning of ready queue
             if (p.executionTime < p.burstTime) {
                 readyQueue.add(p);
             }

@@ -7,96 +7,75 @@
 */
 
 import java.util.*;
+import java.io.*;
 
 public class Driver {
 
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
 
-        // Get number of processes
-        int numProc = getNumProc();
+        // Parse agruments
+        Object[] arguments = parseArgs(args);
+        String processFile = arguments[0].toString();
+        String timeQuantum = arguments[1].toString();
 
-        // Get time quantum
-        double timeQuantum = getTimeQuantum();
+        // Read in process list
+        List<String> processList = readProcesses(processFile);
 
-        // Get burst times for each process
-        List<Double> burstTimes = getBurstTimes(numProc);
+        // Read in parameters for each process
 
-        // Build each process and place in ready queue
-        List<Process> readyQueue = new ArrayList<Process>();
-        for (int i=0; i<numProc; i++) {
-            Process process = new Process();
-            process.pid = i+1;
-            process.burstTime = burstTimes.get(i);
-            readyQueue.add(process);
-        }
 
-        Scheduler scheduler = new Scheduler();
-        scheduler.roundRobin(readyQueue, timeQuantum);
+        // // Build each process and place in ready queue
+        // List<Process> readyQueue = new ArrayList<Process>();
+        // for (int i=0; i<numProc; i++) {
+        //     Process process = new Process();
+        //     process.pid = i+1;
+        //     process.burstTime = burstTimes.get(i);
+        //     readyQueue.add(process);
+        // }
+
+        // Scheduler scheduler = new Scheduler();
+        // scheduler.roundRobin(readyQueue, timeQuantum);
     }
 
 
-    public static List<Double> getBurstTimes(int numProc) {
+    public static Object[] parseArgs(String[] args) {
         /*
-         * Return a list containing the burst times for each process
+         * Parse command line arguments. Return arguments in a list of objects.
         */
 
-        Scanner keyboard = new Scanner(System.in);
-        List<Double> burstTimes = new ArrayList<Double>();
-        Double burstTime = 0.0;
+        Object[] arguments = new Object[2];
+        try {
+            arguments[0] = args[0];
+            arguments[1] = args[1];
+        } catch(Exception e) {
+            System.out.println("Missing or invalid command line argument.");
+            System.exit(0);
+        }
 
-        for (int i=0; i<numProc; i++) {
+        return arguments;
+    }
 
-            System.out.printf("Enter burst time for process %d:\n", i+1);
 
-            while (!keyboard.hasNextDouble()) {
-                System.out.println("Invalid input.  Please enter a float.");
-                keyboard.next();
+    public static List<String> readProcesses(String processFile) {
+        /*
+         * Return a list of processes to execute.
+        */
+
+        List<String> processList = new ArrayList<String>();
+
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader(processFile));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                processList.add(line);
             }
-            burstTime = keyboard.nextDouble();
-
-            burstTimes.add(burstTime);
+        } catch(Exception e) {
+            System.out.printf("Error reading in file %s", processFile);
         }
 
-        return burstTimes;
-    }
+        System.out.println(processList.get(1));
 
-
-    public static int getNumProc() {
-        /*
-         * Return the number of processes as determined by user
-        */
-
-        Scanner keyboard = new Scanner(System.in);
-        int numProc = 0;
-
-        System.out.println("Enter number of processes:");
-
-        while (!keyboard.hasNextInt()) {
-            System.out.println("Invalid input.  Please enter an integer.");
-            keyboard.next();
-        }
-        numProc = keyboard.nextInt();
-
-        return numProc;
-    }
-
-
-    public static double getTimeQuantum() {
-        /*
-         * Return the time quantum as determined by user
-        */
-
-        Scanner keyboard = new Scanner(System.in);
-        double timeQuantum = 0.0;
-
-        System.out.println("Enter time quantum:");
-        while (!keyboard.hasNextDouble()) {
-            System.out.println("Invalid input.  Please enter a float.");
-            keyboard.next();
-        }
-        timeQuantum = keyboard.nextDouble();
-
-        return timeQuantum;
+        return processList;
     }
 }
