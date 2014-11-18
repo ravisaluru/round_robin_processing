@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Scheduler {
 
-    public void roundRobin(List<Process> readyQueue, double timeQuantum) {
+    public void roundRobin(List<Process> readyQueue, int timeQuantum) {
         /*
          * Execute the scheduler using Round-Robin Scheduling.
         */
@@ -20,10 +20,12 @@ public class Scheduler {
             // execution time == burst time
             if (p.executionTime + timeQuantum < p.burstTime) {
                 System.out.printf("\tExecuting process PID = %s\n", p.pid);
+                sleep(timeQuantum);
                 p.executionTime = p.executionTime + timeQuantum;
                 readyQueue.remove(0);
             } else if (p.executionTime + timeQuantum >= p.burstTime) {
                 System.out.printf("\tExecuting process PID = %s\n", p.pid);
+                sleep(timeQuantum);
                 p.executionTime = p.executionTime + (p.burstTime - p.executionTime);
                 readyQueue.remove(0);
             }
@@ -33,6 +35,19 @@ public class Scheduler {
             if (p.executionTime < p.burstTime) {
                 readyQueue.add(p);
             }
+        }
+    }
+
+
+    private void sleep(int timeQuantum) {
+        /*
+         * Suspend the program execution for the timeQuantum amount.
+        */
+
+        try {
+            Thread.sleep(timeQuantum * 1000);
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
         }
     }
 }
