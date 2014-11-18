@@ -17,7 +17,7 @@ public class Driver {
         // Parse agruments
         Object[] arguments = parseArgs(args);
         String processFile = arguments[0].toString();
-        String timeQuantum = arguments[1].toString();
+        Double timeQuantum = Double.parseDouble(arguments[1].toString());
 
         // Read in process list
         List<String> processList = readProcesses(processFile);
