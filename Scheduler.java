@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Scheduler {
 
-    public void roundRobin(List<Process> readyQueue, int timeQuantum) {
+    public void roundRobin(List<Process> readyQueue, Double timeQuantum) {
         /*
          * Execute the scheduler using Round-Robin Scheduling.
         */
@@ -18,14 +18,14 @@ public class Scheduler {
             // If the process execution time is less than burst time,
             // then execute the process for a time quantum or until
             // execution time == burst time
-            if (p.executionTime + timeQuantum < p.burstTime) {
+            if (p.executionTime + timeQuantum <= p.burstTime) {
                 System.out.printf("\tExecuting process PID = %s\n", p.pid);
-                sleep(timeQuantum);
+                sleep(convertToMillis(timeQuantum));
                 p.executionTime = p.executionTime + timeQuantum;
                 readyQueue.remove(0);
-            } else if (p.executionTime + timeQuantum >= p.burstTime) {
+            } else if (p.executionTime + timeQuantum > p.burstTime) {
                 System.out.printf("\tExecuting process PID = %s\n", p.pid);
-                sleep(timeQuantum);
+                sleep(convertToMillis(timeQuantum - (p.burstTime - p.executionTime)));
                 p.executionTime = p.executionTime + (p.burstTime - p.executionTime);
                 readyQueue.remove(0);
             }
@@ -39,15 +39,23 @@ public class Scheduler {
     }
 
 
-    private void sleep(int timeQuantum) {
+    private void sleep(int sleepTime) {
         /*
          * Suspend the program execution for the timeQuantum amount.
         */
 
         try {
-            Thread.sleep(timeQuantum * 1000);
+            Thread.sleep(sleepTime);
         } catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    private int convertToMillis(Double timeQuantum) {
+
+        Double timeQuantumMilli = timeQuantum * 1000;
+        int sleepTime = timeQuantumMilli.intValue();
+        System.out.printf("Sleeping for %d", sleepTime);
+        return sleepTime;
     }
 }
